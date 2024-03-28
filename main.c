@@ -1,4 +1,5 @@
-#include <windows.h>
+#include "windows.h"
+
 #include <GL/freeglut.h>
 #include <stdio.h>
 
