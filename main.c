@@ -1,4 +1,5 @@
-#include <windows.h>
+#include "windows.h"
+
 #include <GL/freeglut.h>
 #include <stdio.h>
 
@@ -7,15 +8,18 @@
 double degree = 0;
 double max = 360;
 
-void rotate(){
-    if(degree == max) degree = 0;
-    else degree += 1;
+void rotate()
+{
+    if (degree == max)
+        degree = 0;
+    else
+        degree += 1;
 
     glutPostRedisplay();
 }
 
-void lighting(){
-
+void lighting()
+{
     float position[4] = {0.5f, 0.4f, 0.5f, 0.0f};
     float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     float diffuse[4] = {0.8f, 0.8f, 0.8f, 1.0f};
@@ -26,13 +30,11 @@ void lighting(){
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, white);
 
-
     float global_ambient[4] = {0.2f, 0.2f, 0.2f, 0.1f};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    glEnable(GL_COLOR_MATERIAL);
 
 }
 
@@ -41,22 +43,21 @@ int init()
     glClearColor(0.5, 0.5, 0.5, 1.0);
     glEnable(GL_DEPTH_TEST);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-2, 2, -2, 2, -2, 2);
-
     lighting();
-
 }
-
 
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-2, 2, -2, 2, -2, 2);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    /* SCREEN 1 */
 
     glPushMatrix();
 
@@ -71,19 +72,22 @@ void display()
 
     desenharTelaXZ();
 
-    //segunda tela
+    /* SCREEN 2 */
+
     glPopMatrix();
     glPushMatrix();
 
     desenharTelaXY();
 
-    //terceira tela
+    /* SCREEN 3 */
+
     glPopMatrix();
     glPushMatrix();
 
     desenharTelaYZ();
 
-    //quarta tela
+    /* SCREEN 4 */
+    
     glPopMatrix();
     glPushMatrix();
 
@@ -92,9 +96,7 @@ void display()
     rotate();
 
     glutSwapBuffers();
-
 }
-
 
 int main(int argc, char **argv)
 {
@@ -110,4 +112,3 @@ int main(int argc, char **argv)
     glutMainLoop();
     return 0;
 }
-
