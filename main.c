@@ -32,6 +32,7 @@ void lighting(){
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
 
 }
 
@@ -57,6 +58,15 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glPushMatrix();
+
+    glColor3f(1, 1, 1);
+    glBegin(GL_LINES);
+        glVertex3d(1, 1, 0);
+        glVertex3d(800, 1, 0);
+    glEnd();
+
+    glPopMatrix();
     glPushMatrix();
 
     desenharTelaXZ();
