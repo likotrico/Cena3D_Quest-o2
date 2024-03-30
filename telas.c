@@ -63,15 +63,20 @@ void desenharTelaXZ()
 
 void desenharPerspectiva(double degree)
 {
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(1, 1, 1, .0, .0, .0, .0, 1, .0);
-
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(60, 1, 0.01, 5);
 
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0.0, 1.5, 3, //0.0, 0.5, 0.5 ou 0.0, 1.5, 3
+              0.0, 0, 0.0,
+              0.0, 1, 0.0);
+
     glViewport(405, 10, 385, 385);
+
+    //glFrustum(-1, 1 , -1, 1, 1, -1);
+
 
     float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
     float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFICIE
@@ -81,6 +86,7 @@ void desenharPerspectiva(double degree)
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
 
+    glTranslatef(0, 0, 0);
     glRotated(degree, 0, 1, 0);
     glutSolidTeapot(0.7);
 }

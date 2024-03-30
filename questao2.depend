@@ -1,6 +1,6 @@
 # depslib dependency file v1.0
-1711380353 source:c:\users\user\desktop\questão 2 trabalho final cg\questao2\main.c
-	<windows.h>
+1711728696 source:c:\users\user\desktop\questão 2 trabalho final cg\questao2\main.c
+	"windows.h"
 	<GL/freeglut.h>
 	<stdio.h>
 	"telas.h"
@@ -243,11 +243,14 @@
 	<_mingw.h>
 	<stddef.h>
 
-1711380311 source:c:\users\user\desktop\questão 2 trabalho final cg\questao2\telas.c
-	<windows.h>
+1711805486 source:c:\users\user\desktop\questão 2 trabalho final cg\questao2\telas.c
+	"windows.h"
 	<GL/freeglut.h>
 	<stdlib.h>
 	<stdio.h>
 
 1711380287 c:\users\user\desktop\questão 2 trabalho final cg\questao2\telas.h
+
+1711725931 c:\users\user\desktop\questão 2 trabalho final cg\questao2\windows.h
+	<windows.h>
 

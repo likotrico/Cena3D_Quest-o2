@@ -49,6 +49,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="telas.h" />
+		<Unit filename="windows.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
