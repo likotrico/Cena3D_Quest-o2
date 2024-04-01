@@ -4,13 +4,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "telas.h"
+
+int zoom = 0;
+
 void desenharTelaXY()
 {
     gluLookAt(0.0, 0.0, 0.5,
               0.0, 0.0, 0.0,
               0.0, 1.0, 0.0);
 
-    glViewport(10, 405, 385, 385);
+    glViewport(m, m * 3 + h, w, h);
 
     float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
     float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFICIE
@@ -20,7 +24,7 @@ void desenharTelaXY()
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
 
-    glutSolidTeapot(0.7);
+    glutSolidTeapot(1);
 }
 
 void desenharTelaYZ()
@@ -29,7 +33,7 @@ void desenharTelaYZ()
               0.0, 0.0, 0.0,
               0.0, 1.0, 0.0);
 
-    glViewport(405, 405, 385, 385);
+    glViewport(m * 3 + h, m * 3 + h, w, h);
 
     float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
     float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFICIE
@@ -39,7 +43,7 @@ void desenharTelaYZ()
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
 
-    glutSolidTeapot(0.7);
+    glutSolidTeapot(1);
 }
 
 void desenharTelaXZ()
@@ -48,7 +52,7 @@ void desenharTelaXZ()
               0.0, 0.0, 0.0,
               0.0, 0.0, -1.0);
 
-    glViewport(10, 10, 385, 385);
+    glViewport(m, m, w, h);
 
     float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
     float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFICIE
@@ -58,20 +62,22 @@ void desenharTelaXZ()
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
 
-    glutSolidTeapot(0.7);
+    glutSolidTeapot(1);
 }
 
-void desenharPerspectiva(double degree)
+void desenharPerspectiva(int degree)
 {
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(1, 1, 1, .0, .0, .0, .0, 1, .0);
+    int dist = 2;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60, 1, 0.01, 5);
+    gluPerspective(70, 1, 0.01, 50);
 
-    glViewport(405, 10, 385, 385);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(dist, dist, dist, 0, 0, 0, 0, 1, 0);
+
+    glViewport(m * 3 + h, m, w, h);
 
     float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
     float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFICIE
@@ -82,5 +88,5 @@ void desenharPerspectiva(double degree)
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
 
     glRotated(degree, 0, 1, 0);
-    glutSolidTeapot(0.7);
+    glutSolidTeapot(1);
 }

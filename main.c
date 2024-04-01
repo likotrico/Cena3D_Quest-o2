@@ -5,15 +5,12 @@
 
 #include "telas.h"
 
-double degree = 0;
-double max = 360;
+int degree = 0;
 
 void rotate()
 {
-    if (degree == max)
-        degree = 0;
-    else
-        degree += 1;
+    degree += 1;
+    degree %= 360;
 
     glutPostRedisplay();
 }
@@ -77,7 +74,7 @@ void display()
     desenharTelaYZ();
 
     /* SCREEN 4 */
-    
+
     glPopMatrix();
     glPushMatrix();
 
@@ -90,11 +87,10 @@ void display()
 
 int main(int argc, char **argv)
 {
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(200, 0);
-    glutInitWindowSize(800, 800);
+    glutInitWindowSize(W, H);
     glutCreateWindow("Cena 3D");
 
     init();
