@@ -20,7 +20,7 @@ void keyPressed(unsigned char key, int x, int y)
     if (key == '-' && zoom < maxZ)
         zoom++;
 
-    if (key == '=' && zoom > minZ)
+    if ((key == '=' || key == '+') && zoom > minZ)
         zoom--;
 
     double d = 2.25 + zoom * incZ;
