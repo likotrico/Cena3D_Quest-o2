@@ -7,7 +7,7 @@
 
 int degree = 0;
 
-void rotate()
+void update()
 {
     degree += 1;
     degree %= 360;
@@ -46,6 +46,14 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
+    float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFICIE
+    float ns_block = 65.0f;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd_block);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
+    glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-2, 2, -2, 2, -2, 2);
@@ -53,34 +61,33 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    /* SCREEN 1 */
+    /* TELA 1 */
 
     glPushMatrix();
-
     desenharTelaXZ();
-
-    /* SCREEN 2 */
-
     glPopMatrix();
-    glPushMatrix();
 
+    /* TELA 2 */
+
+    glPushMatrix();
     desenharTelaXY();
-
-    /* SCREEN 3 */
-
     glPopMatrix();
-    glPushMatrix();
 
+    /* TELA 3 */
+
+    glPushMatrix();
     desenharTelaYZ();
-
-    /* SCREEN 4 */
-
     glPopMatrix();
+
+    /* TELA 4 */
+
     glPushMatrix();
-
     desenharPerspectiva(degree);
+    glPopMatrix();
 
-    rotate();
+    /* ANIMAÇÃO */
+
+    update();
 
     glutSwapBuffers();
 }
@@ -96,5 +103,6 @@ int main(int argc, char **argv)
     init();
     glutDisplayFunc(display);
     glutMainLoop();
+
     return 0;
 }
