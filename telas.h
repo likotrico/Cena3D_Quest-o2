@@ -1,15 +1,17 @@
 #ifndef TELAS_H
 #define TELAS_H
 
-#define m 5
-#define W 600
-#define H 600
+#define m 0
+#define W 640
+#define H 640
 #define w (W - 4 * m) / 2
 #define h (H - 4 * m) / 2
 
-#define incZ 0.5
-#define minZ -1
-#define maxZ (50-2) / incZ
+#define incZ .25
+#define minZ -4
+#define maxZ 11
+
+extern int zoom;
 
 void desenharTelaXY();
 

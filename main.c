@@ -15,6 +15,19 @@ void update()
     glutPostRedisplay();
 }
 
+void keyPressed(unsigned char key, int x, int y)
+{
+    if (key == '-' && zoom < maxZ)
+        zoom++;
+
+    if (key == '=' && zoom > minZ)
+        zoom--;
+
+    double d = 2.25 + zoom * incZ;
+
+    printf("z: %d\nd: %.2f\n", zoom, d);
+}
+
 void lighting()
 {
     float position[4] = {0.5f, 0.4f, 0.5f, 0.0f};
@@ -102,6 +115,9 @@ int main(int argc, char **argv)
 
     init();
     glutDisplayFunc(display);
+
+    glutKeyboardFunc(keyPressed);
+
     glutMainLoop();
 
     return 0;
