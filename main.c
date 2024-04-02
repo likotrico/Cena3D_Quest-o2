@@ -12,7 +12,7 @@ int prints = 0;
 
 void printScreen(const char *filename)
 {
-    /** @brief Alocação dos pixeis */
+    /** @brief Alocação dos pixeis da captura de tela */
     unsigned char *pixels = (unsigned char *)malloc(3 * VP_SIZE * VP_SIZE);
 
     // Lê o frame buffer
@@ -79,7 +79,27 @@ void lighting()
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+}
 
+void loadTex()
+{
+    /** @brief Alocação dos da textura */
+    unsigned char *pixels = (unsigned char *)malloc(3 * VP_SIZE * VP_SIZE);
+
+    GLuint textures[1];
+    glGenTextures(1, textures);
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 555, 260, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    // Wrapping
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+    // Filtro de Ampliação e Minificação
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+    glActiveTexture(GL_TEXTURE0);
 }
 
 int init()
@@ -94,6 +114,8 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    /* MATERIAL */
+
     float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
     float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFÍCIE
     float ns_block = 90.0f;
@@ -101,6 +123,12 @@ void display()
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd_block);
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
+
+    /* TEXTURA */
+
+    loadTex();
+
+    /* VISÃO ORTOGONAL */
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
