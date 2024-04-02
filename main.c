@@ -3,16 +3,53 @@
 #include <GL/freeglut.h>
 #include <stdio.h>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 #include "telas.h"
 
 int degree = 0;
 
+/**
+ * @brief Incrementa o ângulo de rotação e atualiza a tela
+ */
 void update()
 {
     degree += 1;
     degree %= 360;
 
     glutPostRedisplay();
+}
+
+/**
+ * @brief Exporta uma captura da janela no formato PNG
+ *
+ * @param arquivo Nome do arquivo
+ */
+void printScreen(const char *arquivo)
+{
+    /** @brief Alocação dos pixeis */
+    unsigned char *pixels = (unsigned char *)malloc(3 * W * H);
+
+    // Lê o frame buffer
+    glReadPixels(0, 0, W, H, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    // Inverte na vertical
+    for (int y = 0; y < H / 2; y++)
+        for (int x = 0; x < W * 3; x++)
+        {
+            int i = y * W * 3 + x;
+            int j = (H - y - 1) * W * 3 + x;
+
+            unsigned char temp = pixels[i];
+            pixels[i] = pixels[j];
+            pixels[j] = temp;
+        }
+
+    // Escreve no arquivo usando a biblioteca stb do usuário nothings no GitHub
+    stbi_write_png(arquivo, W, H, 3, pixels, W * 3);
+
+    free(pixels);
 }
 
 void keyPressed(unsigned char key, int x, int y)
@@ -23,9 +60,8 @@ void keyPressed(unsigned char key, int x, int y)
     if ((key == '=' || key == '+') && zoom > minZ)
         zoom--;
 
-    double d = 2.25 + zoom * incZ;
-
-    printf("z: %d\nd: %.2f\n", zoom, d);
+    if (key == 13)
+        printScreen("screenshot.png");
 }
 
 void lighting()
