@@ -49,6 +49,7 @@ void desenharPerspectiva(int degree)
 
     glViewport(VP_4);
 
+    glTranslatef(0, 0, 0);
     glRotated(degree, 0, 1, 0);
     glutSolidTeapot(.7);
 }

@@ -73,6 +73,7 @@ void lighting()
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+
 }
 
 int init()
