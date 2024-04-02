@@ -59,7 +59,7 @@ void keyPressed(unsigned char key, int x, int y)
         zoom--;
 
     if (key == 13) // ENTER
-        printScreen("screenshot");
+        printScreen("tiro-de-tela");
 }
 
 void lighting()
@@ -95,8 +95,8 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
-    float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFICIE
-    float ns_block = 65.0f;
+    float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFÍCIE
+    float ns_block = 90.0f;
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd_block);
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
