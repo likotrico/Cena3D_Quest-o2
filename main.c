@@ -87,8 +87,11 @@ void keyPressed(unsigned char key, int x, int y)
 
     if ((key == '=' || key == '+') && zoom > MIN_Z)
         zoom--;
+}
 
-    if (key == 13) // ENTER
+void skeyPressed(int key, int x, int y)
+{
+    if (key == GLUT_KEY_F12)
         printScreen("tiro-de-tela");
 }
 
@@ -118,7 +121,7 @@ int init()
 
     /* MATERIAL */
 
-    float kd_block[4] = {0.75f, 0.75f, 0.75f, 1.0f}; // DEFINE A COR
+    float kd_block[4] = {0.70f, 0.70f, 0.70f, 1.0f}; // DEFINE A COR
     float ks_block[4] = {0.95f, 0.95f, 0.95f, 1.0f}; // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFÍCIE
     float ns_block = 90.0f;
 
@@ -192,6 +195,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(display);
 
     glutKeyboardFunc(keyPressed);
+    glutSpecialFunc(skeyPressed);
 
     glutMainLoop();
 
