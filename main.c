@@ -8,6 +8,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+int prints = 0;
+
 void printScreen(const char *filename)
 {
     /** @brief Alocação dos pixeis */
@@ -28,8 +30,12 @@ void printScreen(const char *filename)
             pixels[j] = temp;
         }
 
+    char f[50];
+    sprintf(f, "%s-%d.png", filename, prints);
+    prints++;
+
     // Escreve no arquivo usando a biblioteca stb do usuário nothings no GitHub
-    stbi_write_png(filename, VP_SIZE, VP_SIZE, 3, pixels, VP_SIZE * 3);
+    stbi_write_png(f, VP_SIZE, VP_SIZE, 3, pixels, VP_SIZE * 3);
 
     free(pixels);
 }
@@ -53,7 +59,7 @@ void keyPressed(unsigned char key, int x, int y)
         zoom--;
 
     if (key == 13) // ENTER
-        printScreen("screenshot.png");
+        printScreen("screenshot");
 }
 
 void lighting()
