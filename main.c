@@ -43,20 +43,21 @@ void printScreen(const char *filename)
     free(pixels);
 }
 
-void initTex()
+GLuint texture;
+
+void initTexture()
 {
-    int x = 640, y = 640, ch = 3;
+    int x = 550, y = 260, ch = 3;
 
     /** @brief Buffer da textura */
     unsigned char *pixels = stbi_load("texture.jpg", &x, &y, &ch, STBI_rgb);
 
-    GLuint textures;
-    glGenTextures(1, &textures);
-    glBindTexture(GL_TEXTURE_2D, textures);
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     // Wrapping
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Filtro de Ampliação e Minificação
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -65,6 +66,7 @@ void initTex()
     // Carrega a textura do buffer
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 555, 260, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
+    // Ativa a textura
     glActiveTexture(GL_TEXTURE0);
 
     stbi_image_free(pixels);
@@ -121,17 +123,22 @@ int init()
 
     /* MATERIAL */
 
-    float kd_block[4] = {0.70f, 0.70f, 0.70f, 1.0f}; // DEFINE A COR
-    float ks_block[4] = {0.95f, 0.95f, 0.95f, 1.0f}; // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFÍCIE
-    float ns_block = 90.0f;
-
+    /** @brief Cor do Material */
+    float kd_block[4] = {.7, .7, .7, 1}; // {.85, .65, .13, 1};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd_block);
+
+    // /** @brief Cor do Brilho*/
+    float ks_block[4] = {.9, .9, .9, 1};
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
+
+    /** @brief Concentração do Brilho */
+    float ns_block = 120.0f;
+
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
 
     /* TEXTURA */
 
-    initTex();
+    initTexture();
 
     /* ILUMINAÇÃO */
 
