@@ -3,16 +3,39 @@
 #include <GL/freeglut.h>
 #include <stdio.h>
 
+#include "telas.h"
+
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "telas.h"
+void printScreen(const char *filename)
+{
+    /** @brief Alocação dos pixeis */
+    unsigned char *pixels = (unsigned char *)malloc(3 * VP_SIZE * VP_SIZE);
+
+    // Lê o frame buffer
+    glReadPixels(VP_4, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    // Inverte na vertical
+    for (int y = 0; y < VP_SIZE / 2; y++)
+        for (int x = 0; x < VP_SIZE * 3; x++)
+        {
+            int i = y * VP_SIZE * 3 + x;
+            int j = (VP_SIZE - y - 1) * VP_SIZE * 3 + x;
+
+            unsigned char temp = pixels[i];
+            pixels[i] = pixels[j];
+            pixels[j] = temp;
+        }
+
+    // Escreve no arquivo usando a biblioteca stb do usuário nothings no GitHub
+    stbi_write_png(filename, VP_SIZE, VP_SIZE, 3, pixels, VP_SIZE * 3);
+
+    free(pixels);
+}
 
 int degree = 0;
 
-/**
- * @brief Incrementa o ângulo de rotação e atualiza a tela
- */
 void update()
 {
     degree += 1;
@@ -21,46 +44,15 @@ void update()
     glutPostRedisplay();
 }
 
-/**
- * @brief Exporta uma captura da janela no formato PNG
- *
- * @param arquivo Nome do arquivo
- */
-void printScreen(const char *arquivo)
-{
-    /** @brief Alocação dos pixeis */
-    unsigned char *pixels = (unsigned char *)malloc(3 * W * H);
-
-    // Lê o frame buffer
-    glReadPixels(0, 0, W, H, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-
-    // Inverte na vertical
-    for (int y = 0; y < H / 2; y++)
-        for (int x = 0; x < W * 3; x++)
-        {
-            int i = y * W * 3 + x;
-            int j = (H - y - 1) * W * 3 + x;
-
-            unsigned char temp = pixels[i];
-            pixels[i] = pixels[j];
-            pixels[j] = temp;
-        }
-
-    // Escreve no arquivo usando a biblioteca stb do usuário nothings no GitHub
-    stbi_write_png(arquivo, W, H, 3, pixels, W * 3);
-
-    free(pixels);
-}
-
 void keyPressed(unsigned char key, int x, int y)
 {
-    if (key == '-' && zoom < maxZ)
+    if (key == '-' && zoom < MAX_Z)
         zoom++;
 
-    if ((key == '=' || key == '+') && zoom > minZ)
+    if ((key == '=' || key == '+') && zoom > MIN_Z)
         zoom--;
 
-    if (key == 13)
+    if (key == 13) // ENTER
         printScreen("screenshot.png");
 }
 
@@ -146,7 +138,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(200, 0);
-    glutInitWindowSize(W, H);
+    glutInitWindowSize(WIN_SIZE, WIN_SIZE);
     glutCreateWindow("Cena 3D");
 
     init();

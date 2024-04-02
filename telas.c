@@ -3,7 +3,6 @@
 #include <GL/freeglut.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 
 #include "telas.h"
 
@@ -13,7 +12,7 @@ void desenharTelaXY()
 {
     gluLookAt(0, 0, .5, 0, 0, 0, 0, 1, 0);
 
-    glViewport(m, m * 3 + h, w, h);
+    glViewport(VP_MARGIN, VP_MARGIN * 3 + VP_SIZE, VP_SIZE, VP_SIZE);
 
     glutSolidTeapot(1);
 }
@@ -22,7 +21,7 @@ void desenharTelaYZ()
 {
     gluLookAt(.5, 0, 0, 0, 0, 0, 0, 1, 0);
 
-    glViewport(m * 3 + h, m * 3 + h, w, h);
+    glViewport(VP_MARGIN * 3 + VP_SIZE, VP_MARGIN * 3 + VP_SIZE, VP_SIZE, VP_SIZE);
 
     glutSolidTeapot(1);
 }
@@ -31,14 +30,14 @@ void desenharTelaXZ()
 {
     gluLookAt(0, .5, 0, 0, 0, 0, 0, 0, -1);
 
-    glViewport(m, m, w, h);
+    glViewport(VP_MARGIN, VP_MARGIN, VP_SIZE, VP_SIZE);
 
     glutSolidTeapot(1);
 }
 
 void desenharPerspectiva(int degree)
 {
-    double d = 2.25 + zoom * incZ;
+    double d = 2.25 + zoom * INC_Z;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -48,7 +47,7 @@ void desenharPerspectiva(int degree)
     glLoadIdentity();
     gluLookAt(d, d, d, 0, 0, 0, 0, 1, 0);
 
-    glViewport(m * 3 + h, m, w, h);
+    glViewport(VP_4);
 
     glRotated(degree, 0, 1, 0);
     glutSolidTeapot(.7);

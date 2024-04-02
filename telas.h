@@ -1,15 +1,15 @@
 #ifndef TELAS_H
 #define TELAS_H
 
-#define m 0
-#define W 640
-#define H 640
-#define w (W - 4 * m) / 2
-#define h (H - 4 * m) / 2
+#define WIN_SIZE 640
+#define VP_MARGIN 0
+#define VP_SIZE (WIN_SIZE - 4 * VP_MARGIN) / 2
 
-#define incZ .25
-#define minZ -4
-#define maxZ 11
+#define VP_4 VP_MARGIN * 3 + VP_SIZE, VP_MARGIN, VP_SIZE, VP_SIZE
+
+#define INC_Z .25
+#define MIN_Z -4
+#define MAX_Z 11
 
 extern int zoom;
 
