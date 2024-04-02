@@ -3,10 +3,13 @@
 #include <GL/freeglut.h>
 #include <stdio.h>
 
-#include "telas.h"
-
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+#include "telas.h"
 
 int prints = 0;
 
@@ -38,6 +41,33 @@ void printScreen(const char *filename)
     stbi_write_png(f, VP_SIZE, VP_SIZE, 3, pixels, VP_SIZE * 3);
 
     free(pixels);
+}
+
+void initTex()
+{
+    int x = 640, y = 640, ch = 3;
+
+    /** @brief Buffer da textura */
+    unsigned char *pixels = stbi_load("texture.jpg", &x, &y, &ch, STBI_rgb);
+
+    GLuint textures;
+    glGenTextures(1, &textures);
+    glBindTexture(GL_TEXTURE_2D, textures);
+
+    // Wrapping
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+    // Filtro de Ampliação e Minificação
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    // Carrega a textura do buffer
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 555, 260, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+    glActiveTexture(GL_TEXTURE0);
+
+    stbi_image_free(pixels);
 }
 
 int degree = 0;
@@ -81,43 +111,15 @@ void lighting()
     glEnable(GL_LIGHT0);
 }
 
-void loadTex()
-{
-    /** @brief Alocação dos da textura */
-    unsigned char *pixels = (unsigned char *)malloc(3 * VP_SIZE * VP_SIZE);
-
-    GLuint textures[1];
-    glGenTextures(1, textures);
-    glBindTexture(GL_TEXTURE_2D, textures[0]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 555, 260, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-
-    // Wrapping
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-    // Filtro de Ampliação e Minificação
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    
-    glActiveTexture(GL_TEXTURE0);
-}
-
 int init()
 {
     glClearColor(0.5, 0.5, 0.5, 1.0);
     glEnable(GL_DEPTH_TEST);
 
-    lighting();
-}
-
-void display()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     /* MATERIAL */
 
-    float kd_block[4] = {0.85f, 0.65f, 0.13f, 1.0f}; // DEFINE A COR
-    float ks_block[4] = {0.9f, 0.9f, 0.9f, 1.0f};    // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFÍCIE
+    float kd_block[4] = {0.75f, 0.75f, 0.75f, 1.0f}; // DEFINE A COR
+    float ks_block[4] = {0.95f, 0.95f, 0.95f, 1.0f}; // DEFINE O QUAL CONCENTRADO FICA A LUZ NA SUPERFÍCIE
     float ns_block = 90.0f;
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd_block);
@@ -126,7 +128,17 @@ void display()
 
     /* TEXTURA */
 
-    loadTex();
+    initTex();
+
+    /* ILUMINAÇÃO */
+
+    lighting();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_TEXTURE_2D);
 
     /* VISÃO ORTOGONAL */
 

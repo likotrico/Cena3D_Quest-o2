@@ -7,9 +7,9 @@
 
 #define VP_4 VP_MARGIN * 3 + VP_SIZE, VP_MARGIN, VP_SIZE, VP_SIZE
 
-#define INC_Z .25
-#define MIN_Z -4
-#define MAX_Z 11
+#define INC_Z .125
+#define MIN_Z -15
+#define MAX_Z 20
 
 extern int zoom;
 
