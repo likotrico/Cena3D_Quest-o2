@@ -41,7 +41,7 @@ void desenharPerspectiva(int degree)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(70, 1, 0.01, 10);
+    gluPerspective(70, 1, 0.01, 12);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -50,5 +50,5 @@ void desenharPerspectiva(int degree)
     glViewport(VP_4);
 
     glRotated(degree, 0, 1, 0);
-    glutSolidTeapot(.7);
+    glutSolidTeapot(1);
 }

@@ -11,7 +11,9 @@
 
 #include "telas.h"
 
-int prints = 0;
+int n_prt = 0;
+int pause = 0;
+int degree = 0;
 
 void printScreen(const char *filename)
 {
@@ -34,8 +36,8 @@ void printScreen(const char *filename)
         }
 
     char f[50];
-    sprintf(f, "%s-%d.png", filename, prints);
-    prints++;
+    sprintf(f, "%s-%d.png", filename, n_prt);
+    n_prt++;
 
     // Escreve no arquivo usando a biblioteca stb do usuário nothings no GitHub
     stbi_write_png(f, VP_SIZE, VP_SIZE, 3, pixels, VP_SIZE * 3);
@@ -43,41 +45,39 @@ void printScreen(const char *filename)
     free(pixels);
 }
 
-GLuint texture;
+GLuint textureID;
 
 void initTexture()
 {
-    int x = 550, y = 260, ch = 3;
+    int w = 512, h = 512, ch = 3;
 
-    /** @brief Buffer da textura */
-    unsigned char *pixels = stbi_load("texture.jpg", &x, &y, &ch, STBI_rgb);
+    // Buffer da textura
+    unsigned char *pixels = stbi_load("texture.jpg", &w, &h, &ch, STBI_rgb);
 
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
 
     // Wrapping
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
     // Filtro de Ampliação e Minificação
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     // Carrega a textura do buffer
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 555, 260, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-
-    // Ativa a textura
-    glActiveTexture(GL_TEXTURE0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 555, 260, 1, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 
     stbi_image_free(pixels);
 }
 
-int degree = 0;
-
 void update()
 {
-    degree += 1;
-    degree %= 360;
+    if (!pause)
+    {
+        degree += 1;
+        degree %= 360;
+    }
 
     glutPostRedisplay();
 }
@@ -89,6 +89,9 @@ void keyPressed(unsigned char key, int x, int y)
 
     if ((key == '=' || key == '+') && zoom > MIN_Z)
         zoom--;
+
+    if (key == 13 || key == ' ')
+        pause = !pause;
 }
 
 void skeyPressed(int key, int x, int y)
@@ -124,21 +127,18 @@ int init()
     /* MATERIAL */
 
     /** @brief Cor do Material */
-    float kd_block[4] = {.7, .7, .7, 1}; // {.85, .65, .13, 1};
+    // float kd_block[4] = {.7, .7, .7, 1}; // Com textura
+    float kd_block[4] = {.85, .65, .13, 1}; // Amarelo sem textura
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd_block);
 
     // /** @brief Cor do Brilho*/
-    float ks_block[4] = {.9, .9, .9, 1};
+    float ks_block[4] = {.95, .95, .95, 1};
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_block);
 
     /** @brief Concentração do Brilho */
     float ns_block = 120.0f;
 
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
-
-    /* TEXTURA */
-
-    initTexture();
 
     /* ILUMINAÇÃO */
 
@@ -148,7 +148,12 @@ int init()
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    /* TEXTURA */
+
     glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureID);
 
     /* VISÃO ORTOGONAL */
 
@@ -199,6 +204,8 @@ int main(int argc, char **argv)
     glutCreateWindow("Cena 3D");
 
     init();
+    initTexture();
+
     glutDisplayFunc(display);
 
     glutKeyboardFunc(keyPressed);
