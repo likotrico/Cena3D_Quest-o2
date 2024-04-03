@@ -140,6 +140,10 @@ int init()
 
     glMaterialf(GL_FRONT, GL_SHININESS, ns_block);
 
+    /* TEXTURA */
+
+    // initTexture();
+
     /* ILUMINAÇÃO */
 
     lighting();
@@ -151,9 +155,9 @@ void display()
 
     /* TEXTURA */
 
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    // glEnable(GL_TEXTURE_2D);
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, textureID);
 
     /* VISÃO ORTOGONAL */
 
@@ -204,7 +208,6 @@ int main(int argc, char **argv)
     glutCreateWindow("Cena 3D");
 
     init();
-    initTexture();
 
     glutDisplayFunc(display);
 
